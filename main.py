@@ -1,6 +1,7 @@
 import sys
-from Token import *
+
 from Lexer import *
+from Token import *
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -9,3 +10,7 @@ if __name__ == "__main__":
 
     with open(filename) as file:
         source = file.read()
+        print("LEXER:")
+        lexer = Lexer(source).tokenize()
+        for token in lexer:
+            print(token)

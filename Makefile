@@ -1,2 +1,2 @@
 run:
-	python pinky.py scripts/script.pinky
+	python main.py scripts/script.pinky
