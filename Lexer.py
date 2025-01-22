@@ -15,17 +15,13 @@ class Lexer:
             ch = self.advance()
             if ch == "\n":
                 self.__line += 1
+                continue
             elif ch == "\t":
-                pass
+                continue
             elif ch == "\r":
-                pass
+                continue
             elif ch == " ":
-                pass
-            elif ch == "#":
-                while self.peek() != "\n" and not (
-                    self.__current >= len(self.__source)
-                ):
-                    self.advance()
+                continue
             elif ch == "(":
                 self.add_new_token(TOK_LPAREN)
             elif ch == ")":
@@ -40,12 +36,10 @@ class Lexer:
                 self.add_new_token(TOK_RSQUAR)
             elif ch == ".":
                 self.add_new_token(TOK_DOT)
-            if ch == ",":
+            elif ch == ",":
                 self.add_new_token(TOK_COMMA)
             elif ch == "+":
                 self.add_new_token(TOK_PLUS)
-            elif ch == "-":
-                self.add_new_token(TOK_MINUS)
             elif ch == "*":
                 self.add_new_token(TOK_STAR)
             elif ch == "^":
@@ -59,8 +53,7 @@ class Lexer:
             elif ch == "%":
                 self.add_new_token(TOK_MOD)
             elif ch == "=":
-                if self.nextcharis("="):
-                    self.add_new_token(TOK_EQ)
+                self.add_new_token(TOK_EQEQ if self.nextcharis("=") else TOK_EQ)
             elif ch == "~":
                 self.add_new_token(TOK_NEQ if self.nextcharis("=") else TOK_NOT)
             elif ch == "<":
@@ -69,12 +62,24 @@ class Lexer:
                 self.add_new_token(TOK_GEQ if self.nextcharis("=") else TOK_GT)
             elif ch == ":":
                 self.add_new_token(TOK_ASSIGN if self.nextcharis("=") else TOK_COLON)
+            elif ch == "-":
+                if self.nextcharis("-"):
+                    while self.peek() != "\n" and not (
+                        self.__current >= len(self.__source)
+                    ):
+                        self.advance()
+                else:
+                    self.add_new_token(TOK_MINUS)
             elif ch.isdigit():
                 self.handle_numbers()
             elif ch == "'" or ch == '"':
                 self.handle_string(ch)
             elif ch.isalpha() or ch == "_":
                 self.handle_identifier()
+            else:
+                raise SyntaxError(
+                    f"[Line {self.__line}] Error at {ch}: Unexpected character"
+                )
         return self.__tokens
 
     def add_new_token(self, token_type):
