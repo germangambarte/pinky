@@ -127,4 +127,9 @@ class Lexer:
     def handle_identifier(self):
         while self.peek().isalnum() or self.peek() == "_":
             self.advance()
-        self.add_new_token(TOK_IDENTIFIER)
+        identifier = self.__source[self.__start : self.__current]
+        keyword = keywords.get(identifier)
+        if keyword is None:
+            self.add_new_token(TOK_IDENTIFIER)
+        else:
+            self.add_new_token(keyword)
