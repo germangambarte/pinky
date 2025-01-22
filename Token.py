@@ -48,9 +48,11 @@ TOK_RET = "TOK_RET"
 
 
 class Token:
-    def __init__(self, token_type, lexeme) -> None:
-        self.token_type = token_type
-        self.lexeme = lexeme
+
+    def __init__(self, token_type, lexeme, line) -> None:
+        self.__token_type = token_type
+        self.__lexeme = lexeme
+        self.__line = line
 
     def __repr__(self):
-        return f"({self.token_type}, {self.lexeme!r})"
+        return f"({self.__token_type}, {self.__lexeme!r}, {self.__line})"
