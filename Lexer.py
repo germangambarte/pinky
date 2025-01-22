@@ -62,7 +62,6 @@ class Lexer:
                 if self.nextcharis("="):
                     self.add_new_token(TOK_EQ)
             elif ch == "~":
-                # print(f"start: {self.__start}, curr:, {self.__current}")
                 self.add_new_token(TOK_NEQ if self.nextcharis("=") else TOK_NOT)
             elif ch == "<":
                 self.add_new_token(TOK_LEQ if self.nextcharis("=") else TOK_LT)
@@ -70,6 +69,12 @@ class Lexer:
                 self.add_new_token(TOK_GEQ if self.nextcharis("=") else TOK_GT)
             elif ch == ":":
                 self.add_new_token(TOK_ASSIGN if self.nextcharis("=") else TOK_COLON)
+            elif ch.isdigit():
+                self.handle_numbers()
+            elif ch == "'" or ch == '"':
+                self.handle_string(ch)
+            elif ch.isalpha() or ch == "_":
+                self.handle_identifier()
         return self.__tokens
 
     def add_new_token(self, token_type):
@@ -78,6 +83,8 @@ class Lexer:
         )
 
     def peek(self):
+        if self.__current >= len(self.__source):
+            return "\0"
         return self.__source[self.__current]
 
     def lookahead(self, n=1):
@@ -88,9 +95,6 @@ class Lexer:
     def nextcharis(self, expected):
         if self.__current >= len(self.__source):
             return False
-        # print(
-        #     f"start: {self.__source[self.__start]}, curr:, {self.__source[self.__current]}"
-        # )
         if self.__source[self.__current] != expected:
             return False
         self.__current += 1
@@ -100,3 +104,27 @@ class Lexer:
         ch = self.__source[self.__current]
         self.__current += 1
         return ch
+
+    def handle_numbers(self):
+        while self.peek().isdigit():
+            self.advance()
+        if self.peek() == "." and self.lookahead().isdigit():
+            self.advance()
+            while self.peek().isdigit():
+                self.advance()
+            self.add_new_token(TOK_FLOAT)
+        else:
+            self.add_new_token(TOK_INTEGER)
+
+    def handle_string(self, ch):
+        while self.peek() != ch and not (self.__current >= len(self.__source)):
+            self.advance()
+        if self.__current >= len(self.__source):
+            raise SyntaxError(f"[Line {self.__line}] Unterminated string.")
+        self.advance()
+        self.add_new_token(TOK_STRING)
+
+    def handle_identifier(self):
+        while self.peek().isalnum() or self.peek() == "_":
+            self.advance()
+        self.add_new_token(TOK_IDENTIFIER)
