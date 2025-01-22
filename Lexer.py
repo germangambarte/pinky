@@ -22,7 +22,9 @@ class Lexer:
             elif ch == " ":
                 pass
             elif ch == "#":
-                while self.peek() != "\n":
+                while self.peek() != "\n" and not (
+                    self.__current >= len(self.__source)
+                ):
                     self.advance()
             elif ch == "(":
                 self.add_new_token(TOK_LPAREN)
@@ -56,6 +58,18 @@ class Lexer:
                 self.add_new_token(TOK_QUESTION)
             elif ch == "%":
                 self.add_new_token(TOK_MOD)
+            elif ch == "=":
+                if self.nextcharis("="):
+                    self.add_new_token(TOK_EQ)
+            elif ch == "~":
+                # print(f"start: {self.__start}, curr:, {self.__current}")
+                self.add_new_token(TOK_NEQ if self.nextcharis("=") else TOK_NOT)
+            elif ch == "<":
+                self.add_new_token(TOK_LEQ if self.nextcharis("=") else TOK_LT)
+            elif ch == ">":
+                self.add_new_token(TOK_GEQ if self.nextcharis("=") else TOK_GT)
+            elif ch == ":":
+                self.add_new_token(TOK_ASSIGN if self.nextcharis("=") else TOK_COLON)
         return self.__tokens
 
     def add_new_token(self, token_type):
@@ -67,11 +81,16 @@ class Lexer:
         return self.__source[self.__current]
 
     def lookahead(self, n=1):
+        if self.__current >= len(self.__source):
+            return "\0"
         return self.__source[self.__current + n]
 
-    def match(self, expected):
+    def nextcharis(self, expected):
         if self.__current >= len(self.__source):
             return False
+        # print(
+        #     f"start: {self.__source[self.__start]}, curr:, {self.__source[self.__current]}"
+        # )
         if self.__source[self.__current] != expected:
             return False
         self.__current += 1
