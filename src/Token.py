@@ -76,3 +76,12 @@ class Token:
 
     def __repr__(self):
         return f"({self.__token_type}, {self.__lexeme!r}, {self.__line})"
+
+    def get_token_type(self):
+        return self.__token_type
+
+    def get_lexeme(self):
+        return self.__lexeme
+
+    def get_line(self):
+        return self.__line

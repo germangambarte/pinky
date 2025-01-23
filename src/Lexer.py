@@ -1,4 +1,4 @@
-from Token import *
+from src.Token import *
 
 
 class Lexer:
