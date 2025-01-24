@@ -10,4 +10,4 @@ class UnaryOperator(Expression):
         self.__operand = operand
 
     def __repr__(self) -> str:
-        return f"BinaryOperator({self.__op.get_lexeme()!r}, {self.__operand})"
+        return f"UnaryOperator({self.__op.get_lexeme()!r}, {self.__operand})"

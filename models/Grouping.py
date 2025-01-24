@@ -2,10 +2,10 @@ from models.Expression import Expression
 from src.Lexer import Token
 
 
-class UnaryOperator(Expression):
+class Grouping(Expression):
     def __init__(self, value: Expression) -> None:
-        assert isinstance(value, Token), value
+        assert isinstance(value, Expression), value
         self.__value = value
 
     def __repr__(self) -> str:
-        return f"BinaryOperator({self.__value})"
+        return f"Grouping({self.__value})"
