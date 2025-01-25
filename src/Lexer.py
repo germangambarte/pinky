@@ -1,4 +1,5 @@
 from src.Token import *
+from utils.utils import lexing_error
 
 
 class Lexer:
@@ -77,8 +78,9 @@ class Lexer:
             elif ch.isalpha() or ch == "_":
                 self.handle_identifier()
             else:
-                raise SyntaxError(
-                    f"[Line {self.__line}] Error at {ch}: Unexpected character"
+                lexing_error(
+                    f"Error at {ch}: Unexpected character",
+                    self.__line
                 )
         return self.__tokens
 
@@ -125,7 +127,7 @@ class Lexer:
         while self.peek() != ch and not (self.__current >= len(self.__source)):
             self.advance()
         if self.__current >= len(self.__source):
-            raise SyntaxError(f"[Line {self.__line}] Unterminated string.")
+            lexing_error(f"Unterminated string.",self.__line)
         self.advance()
         self.add_new_token(TOK_STRING)
 
