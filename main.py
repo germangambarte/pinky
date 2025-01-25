@@ -1,18 +1,17 @@
 import os.path
 import sys
 
+from src.Interpreter import Interpreter
 from src.Lexer import Lexer
 from src.Parser import Parser
 from utils.utils import pretty_print
-
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SystemExit("Usage: python pinky.py <filename>")
     filename = sys.argv[1]
-    # filename = os.path.join(os.path.dirname(__file__), 'scripts/script.pinky')
 
-    with open(filename) as file:
+    with (open(filename) as file):
         print("*********************************")
         print("            SOURCE")
         print("*********************************\n")
@@ -31,3 +30,10 @@ if __name__ == "__main__":
         print("*********************************\n")
         ast = Parser(tokens).parse()
         pretty_print(ast)
+
+        print("\n*********************************")
+        print("          INTERPRETER")
+        print("*********************************\n")
+        interpreter = Interpreter()
+        result = interpreter.interpret(ast)
+        print(result)
