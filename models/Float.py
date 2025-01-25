@@ -9,3 +9,6 @@ class Float(Expression):
 
     def __repr__(self) -> str:
         return f"Float[{self.__value}]"
+
+    def get_value(self):
+        return self.__value

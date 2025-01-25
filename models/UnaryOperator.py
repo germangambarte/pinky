@@ -12,3 +12,9 @@ class UnaryOperator(Expression):
 
     def __repr__(self) -> str:
         return f"UnaryOperator({self.__op.get_lexeme()!r}, {self.__operand})"
+
+    def get_op(self):
+        return self.__op
+
+    def get_operand(self):
+        return self.__operand

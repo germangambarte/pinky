@@ -10,3 +10,6 @@ class Grouping(Expression):
 
     def __repr__(self) -> str:
         return f"Grouping({self.__value})"
+
+    def get_value(self):
+        return self.__value

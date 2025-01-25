@@ -14,3 +14,12 @@ class BinaryOperator(Expression):
 
     def __repr__(self) -> str:
         return f"BinaryOperator({self.__op.get_lexeme()!r}, {self.__lvalue}, {self.__rvalue})"
+
+    def get_lvalue(self):
+        return self.__lvalue
+
+    def get_op(self):
+        return self.__op
+
+    def get_rvalue(self):
+        return self.__rvalue

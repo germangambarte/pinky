@@ -9,3 +9,6 @@ class Integer(Expression):
 
     def __repr__(self) -> str:
         return f"Integer[{self.__value}]"
+
+    def get_value(self):
+        return self.__value
